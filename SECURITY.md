@@ -9,4 +9,4 @@ If you discover a vulnerability in an MCP deployment, please follow responsible 
 2. Give them reasonable time to patch
 3. Public disclosure only after patch is available or after 90 days
 
-For questions about legitimate security research, contact [@youngHunnid](https://t.me/youngHunnid).
+For questions about legitimate security research, contact [@hunnidinnit](https://t.me/hunnidinnit).
