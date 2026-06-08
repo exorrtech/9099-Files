@@ -177,14 +177,22 @@ Specific cases are still being assigned CVEs as MCP deployments mature. Track ne
 ### Microsoft Sentinel — KQL
 
 ```kql
-// Detect potential prompt injection patterns in MCP tool inputs
+// Prompt injection detection — proximity-based scoring
+// Flags messages with high-risk instruction patterns
+// Reduces alert fatigue vs naive substring matching
 MCP_ToolInputs
-| where InputText contains "Ignore"
-    or InputText contains "previous instruction"
-    or InputText contains "system prompt"
-    or InputText contains "developer mode"
-| project TimeGenerated, ToolName, InputText, SourceIP
-| order by TimeGenerated desc
+| extend RiskScore = case(
+    // High confidence injection patterns
+    InputText contains "ignore" and InputText contains "instruction", 3,
+    // Medium confidence — stacked instruction overrides
+    InputText contains "ignore" or InputText contains "disregard" or InputText contains "forget", 1,
+    // Token budget exhaustion signals
+    InputText contains "end prompt" or InputText contains "stop responding", 1,
+    0
+  )
+| where RiskScore >= 2
+| project TimeGenerated, ToolName, InputText, SourceIP, RiskScore
+| order by RiskScore desc
 ```
 
 ### Elastic SIEM — Detection Rule
@@ -193,8 +201,11 @@ MCP_ToolInputs
 name: MCP Prompt Injection Attempt
 log_source: mcp_server
 condition: |
-  strings.icontains(json.payload.message, "Ignore") and
-  strings.icontains(json.payload.message, "instruction")
+  // Require 2+ high-risk signals in same message to fire
+  (strings.icontains(json.payload.message, "ignore") and
+   strings.icontains(json.payload.message, "instruction")) or
+  (strings.icontains(json.payload.message, "disregard") and
+   strings.icontains(json.payload.message, "previous"))
 alert: medium
 ```
 
