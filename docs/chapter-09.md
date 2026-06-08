@@ -58,7 +58,7 @@ def analyze_chain_potential(tools):
         
         for other in tools:
             oname = other.get('name', '')
-           oparams = json.dumps(other.get('parameters', {}))
+            oparams = json.dumps(other.get('parameters', {}))
             
             # If tool A returns something tool B can accept as input
             # e.g., file_read returns content, analyze_text accepts text
