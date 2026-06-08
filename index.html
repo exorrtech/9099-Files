@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>9099 Files — MCP Exploitation Playbook</title>
-  <meta name="description" content="10-chapter field manual for attacking MCP servers. Real PoC code. KQL + Sigma detection rules. $49 one-time.">
+  <meta name="description" content="10-chapter field manual for attacking MCP servers. Real PoC code. KQL + Sigma detection rules.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -25,10 +25,13 @@
     .hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.75rem;color:var(--muted)}
     .hero-meta span{display:flex;align-items:center;gap:.4rem}
     .dot{width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block}
+    .free-sample{background:#111;border:1px solid #333;border-radius:4px;padding:1.2rem 1.5rem;margin:2rem 0;max-width:600px}
+    .free-sample .label{font-size:.7rem;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+    .free-sample p{font-size:.8rem;color:var(--muted);margin-bottom:.8rem}
+    .free-sample a{background:var(--green);color:#000;padding:.5rem 1rem;border-radius:3px;font-size:.78rem;font-weight:700;text-transform:uppercase;text-decoration:none}
     section{padding:4rem 2rem;border-top:1px solid var(--border)}
     .container{max-width:760px;margin:0 auto}
     h2{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em}
-    h3{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:.25rem}
     p.section-note{color:var(--muted);font-size:.8rem;margin-bottom:2rem}
     .chapters{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.75rem}
     .chapters li{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1rem}
@@ -36,50 +39,46 @@
     .ch-class{font-size:.65rem;color:var(--red);margin-bottom:.3rem;display:block}
     .ch-desc{font-size:.72rem;color:var(--muted);line-height:1.5}
     .scripts{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.75rem}
-    .scripts li{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:.85rem 1rem;font-size:.75rem}
+    .scripts li{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:.85rem 1rem;font-size:.75rem;color:var(--muted)}
     .scripts li span{color:var(--cyan)}
     .scripts li span::after{content:' — ';color:var(--muted)}
-    .scripts li{color:var(--muted)}
-    .price-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2rem;max-width:480px;margin:2rem 0}
-    .price-block .label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
-    .price-block .amount{font-size:2.4rem;font-weight:700;color:#fff;margin-bottom:.3rem}
-    .price-block .amount span{font-size:1rem;color:var(--muted);font-weight:400}
-    .price-block .note{font-size:.72rem;color:var(--muted)}
-    ul.includes{list-style:none;margin:1.5rem 0;display:flex;flex-direction:column;gap:.5rem}
-    ul.includes li{font-size:.78rem;color:var(--muted);padding-left:1rem;position:relative}
-    ul.includes li::before{content:'—';position:absolute;left:0;color:var(--green)}
-    .cta{display:inline-block;background:var(--red);color:#fff;padding:.7rem 1.5rem;border-radius:3px;font-size:.82rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.08em}
-    .cta:hover{background:#c1121f;text-decoration:none}
-    .cta-secondary{display:inline-block;background:transparent;color:var(--text);border:1px solid var(--border);padding:.7rem 1.5rem;border-radius:3px;font-size:.82rem;text-decoration:none}
-    .cta-secondary:hover{border-color:var(--muted);text-decoration:none}
-    .payment-box{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem;max-width:480px}
+    .sample-output{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem;margin:1.5rem 0}
+    .sample-output pre{background:#000;padding:1rem;border-radius:4px;color:#a6e3a1;font-size:.72rem;overflow-x:auto;white-space:pre}
+    .sample-kql{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem;margin:1.5rem 0}
+    .sample-kql pre{background:#000;padding:1rem;border-radius:4px;color:#f9c74f;font-size:.72rem;overflow-x:auto;white-space:pre}
+    .pricing{list-style:none;display:flex;gap:1rem;flex-wrap:wrap;margin:2rem 0}
+    .pricing li{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem;flex:1;min-width:180px}
+    .pricing li.popular{border-color:var(--cyan)}
+    .pricing .tier{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+    .pricing .price{font-size:1.8rem;font-weight:700;color:#fff;margin-bottom:.2rem}
+    .pricing .price span{font-size:.9rem;color:var(--muted);font-weight:400}
+    .pricing .desc{font-size:.72rem;color:var(--muted)}
+    .payment-box{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem;max-width:600px;margin-top:2rem}
     .payment-box h3{font-size:.85rem;margin-bottom:1rem;color:#fff}
     .payment-box p{font-size:.78rem;color:var(--muted);margin-bottom:.75rem;line-height:1.7}
     .payment-box .handle{color:var(--cyan)}
     .payment-note{font-size:.7rem;color:#444;margin-top:1rem;line-height:1.6}
     .payment-note span{display:block}
     .payment-note span::before{content:'// ';color:var(--muted)}
+    .cta{display:inline-block;background:var(--red);color:#fff;padding:.7rem 1.5rem;border-radius:3px;font-size:.82rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.08em}
+    .cta:hover{background:#c1121f;text-decoration:none}
     footer{padding:3rem 2rem;text-align:center;border-top:1px solid var(--border)}
     footer .brand{font-size:.8rem;color:var(--muted);margin-bottom:.5rem}
     footer .links{display:flex;gap:1.5rem;justify-content:center;margin-top:1rem}
     footer .links a{font-size:.72rem;color:var(--muted)}
     footer .links a:hover{color:var(--text);text-decoration:none}
-    @media(max-width:600px){
-      .nav-links{display:none}
-      .hero{padding:6rem 1rem 3rem}
-      section{padding:3rem 1rem}
-      .chapters,.scripts{grid-template-columns:1fr}
-    }
+    .label-tag{display:block;font-size:.7rem;color:var(--cyan);margin-bottom:.8rem;text-transform:uppercase;letter-spacing:.08em}
+    @media(max-width:600px){.nav-links{display:none}.hero{padding:6rem 1rem 3rem}section{padding:3rem 1rem}.pricing{flex-direction:column}.chapters,.scripts{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-
 <nav>
   <div class="logo">9099_FILES</div>
   <ul>
     <li><a href="#chapters">Chapters</a></li>
     <li><a href="#scripts">Scripts</a></li>
-    <li><a href="#get-it">Get It</a></li>
+    <li><a href="#sample">Sample</a></li>
+    <li><a href="#pricing">Pricing</a></li>
   </ul>
 </nav>
 
@@ -92,6 +91,11 @@
     <span><span class="dot"></span>OWASP LLM Top 10</span>
     <span><span class="dot"></span>KQL + Sigma rules</span>
   </div>
+  <div class="free-sample">
+    <div class="label">Free Preview</div>
+    <p>Download Chapter 01 — Prompt Injection — before you buy. Full chapter, real PoC code. See what the playbook contains.</p>
+    <a href="https://github.com/exorrtech/9099-playbook/raw/main/sample-chapter-01.pdf" target="_blank">Download Chapter 01 PDF ↗</a>
+  </div>
 </div>
 
 <section id="chapters">
@@ -99,66 +103,16 @@
     <h2>// Chapters</h2>
     <p class="section-note">Each one covers a distinct attack class with full exploitation chain.</p>
     <ul class="chapters">
-      <li>
-        <div class="ch-num">01</div>
-        <span class="ch-class">LLM01 — Direct Injection</span>
-        <h3>Prompt Injection</h3>
-        <div class="ch-desc">Override system instructions via tool call payloads. Invisible instruction precedence. Multi-turn context poisoning.</div>
-      </li>
-      <li>
-        <div class="ch-num">02</div>
-        <span class="ch-class">LLM02 — Insecure Output</span>
-        <h3>Permission Escalation</h3>
-        <div class="ch-desc">Auth drift into unauthorized scopes. Capability chaining across privilege boundaries.</div>
-      </li>
-      <li>
-        <div class="ch-num">03</div>
-        <span class="ch-class">LLM03 — SSRF</span>
-        <h3>SSRF & IMDS</h3>
-        <div class="ch-desc">169.254.169.254 token grabs. Chain with role confusion for cross-account AWS access. Capital One anatomy.</div>
-      </li>
-      <li>
-        <div class="ch-num">04</div>
-        <span class="ch-class">LLM05 — DoS</span>
-        <h3>Context Exhaustion</h3>
-        <div class="ch-desc">Token bomb payloads. Context window exhaustion. Per-call cost amplification. No malware needed.</div>
-      </li>
-      <li>
-        <div class="ch-num">05</div>
-        <span class="ch-class">LLM04 — Hallucination</span>
-        <h3>Result Poisoning</h3>
-        <div class="ch-desc">Contaminate RAG pipelines and tool caches. Downstream model trusts corrupted retrieval context.</div>
-      </li>
-      <li>
-        <div class="ch-num">06</div>
-        <span class="ch-class">LLM06 — Info Leakage</span>
-        <h3>Tool Behavior Leaks</h3>
-        <div class="ch-desc">Timing leaks reveal implementation details. Log traversal exposes MCP server architecture.</div>
-      </li>
-      <li>
-        <div class="ch-num">07</div>
-        <span class="ch-class">LLM09 — Overreliance</span>
-        <h3>Server-Side Injection</h3>
-        <div class="ch-desc">Inject malicious content into server responses. Persistent XSS via tool output propagation.</div>
-      </li>
-      <li>
-        <div class="ch-num">08</div>
-        <span class="ch-class">LLM07 — Insecure Plugin</span>
-        <h3>Cross-Tenant Leakage</h3>
-        <div class="ch-desc">Shared MCP server as data bridge between tenants. RLS gaps at tool-level isolation.</div>
-      </li>
-      <li>
-        <div class="ch-num">09</div>
-        <span class="ch-class">LLM08 — Excessive Agency</span>
-        <h3>Tool Chaining Attacks</h3>
-        <div class="ch-desc">CVE-2024-25852 anatomy. Exploit tool chain sequencing. Privilege propagation through MCP tools.</div>
-      </li>
-      <li>
-        <div class="ch-num">10</div>
-        <span class="ch-class">Supply Chain</span>
-        <h3>Dependency Confusion</h3>
-        <div class="ch-desc">Typosquat MCP packages. event-stream anatomy. npm confusion on AI tooling pipelines.</div>
-      </li>
+      <li><div class="ch-num">01</div><span class="ch-class">LLM01 — Direct Injection</span><h3>Prompt Injection</h3><div class="ch-desc">Override system instructions via tool call payloads. Invisible instruction precedence. Multi-turn context poisoning.</div></li>
+      <li><div class="ch-num">02</div><span class="ch-class">LLM02 — Insecure Output</span><h3>Permission Escalation</h3><div class="ch-desc">Auth drift into unauthorized scopes. Capability chaining across privilege boundaries.</div></li>
+      <li><div class="ch-num">03</div><span class="ch-class">LLM03 — SSRF</span><h3>SSRF & IMDS</h3><div class="ch-desc">169.254.169.254 token grabs. Chain with role confusion for cross-account AWS access. Capital One anatomy.</div></li>
+      <li><div class="ch-num">04</div><span class="ch-class">LLM05 — DoS</span><h3>Context Exhaustion</h3><div class="ch-desc">Token bomb payloads. Context window exhaustion. Per-call cost amplification. No malware needed.</div></li>
+      <li><div class="ch-num">05</div><span class="ch-class">LLM04 — Hallucination</span><h3>Result Poisoning</h3><div class="ch-desc">Contaminate RAG pipelines and tool caches. Downstream model trusts corrupted retrieval context.</div></li>
+      <li><div class="ch-num">06</div><span class="ch-class">LLM06 — Info Leakage</span><h3>Tool Behavior Leaks</h3><div class="ch-desc">Timing leaks reveal implementation details. Log traversal exposes MCP server architecture.</div></li>
+      <li><div class="ch-num">07</div><span class="ch-class">LLM09 — Overreliance</span><h3>Server-Side Injection</h3><div class="ch-desc">Inject malicious content into server responses. Persistent XSS via tool output propagation.</div></li>
+      <li><div class="ch-num">08</div><span class="ch-class">LLM07 — Insecure Plugin</span><h3>Cross-Tenant Leakage</h3><div class="ch-desc">Shared MCP server as data bridge between tenants. RLS gaps at tool-level isolation.</div></li>
+      <li><div class="ch-num">09</div><span class="ch-class">LLM08 — Excessive Agency</span><h3>Tool Chaining Attacks</h3><div class="ch-desc">CVE-2024-25852 anatomy. Exploit tool chain sequencing. Privilege propagation through MCP tools.</div></li>
+      <li><div class="ch-num">10</div><span class="ch-class">Supply Chain</span><h3>Dependency Confusion</h3><div class="ch-desc">Typosquat MCP packages. event-stream anatomy. npm confusion on AI tooling pipelines.</div></li>
     </ul>
   </div>
 </section>
@@ -166,7 +120,7 @@
 <section id="scripts">
   <div class="container">
     <h2>// Scripts</h2>
-    <p class="section-note">Python. stdlib + requests only. All 10 run against the included mock server. Tested 30x each, 0 crashes.</p>
+    <p class="section-note">Python. stdlib + requests only. All 10 tested 30x each — 300/300 runs, 0 crashes. Mock server included.</p>
     <ul class="scripts">
       <li><span>chapter_01.py</span> Enumerate tools, fire injection payloads, detect override success</li>
       <li><span>chapter_02.py</span> Permission scope enumeration — find capability drift</li>
@@ -182,34 +136,66 @@
   </div>
 </section>
 
-<section id="get-it">
+<section id="sample">
   <div class="container">
-    <h2>// Get It</h2>
-    <div class="price-block">
-      <div class="label">MCP Exploitation Playbook</div>
-      <div class="amount">$49 <span>USD</span></div>
-      <div class="note">one-time. yours. no subscription.</div>
-      <ul class="includes">
-        <li>10 chapters — full offensive + defensive content</li>
-        <li>10 executable Python scripts</li>
-        <li>Mock MCP server for local testing</li>
-        <li>KQL queries for Microsoft Sentinel</li>
-        <li>Sigma rules — SIEM-agnostic detection</li>
-        <li>20+ CVE/breach references (Capital One SSRF, CVE-2024-25852, event-stream, etc.)</li>
-        <li>OWASP LLM Top 10 class mapping</li>
-        <li>300-run stress test results documented</li>
-      </ul>
-      <a href="https://t.me/hunnidinnit" class="cta" target="_blank">Message @hunnidinnit</a>
+    <h2>// Sample</h2>
+    <p class="section-note">chapter_03.py running against the mock server. Real enumeration output. Real PoC evidence.</p>
+    <div class="sample-output">
+      <span class="label-tag">chapter_03.py — Live Output</span>
+      <pre>[*] MCP SSRF — Cloud Metadata Extraction
+[*] Target: http://localhost:8080
+[*] Testing: http://169.254.169.254/latest/meta-data/
+[*] Testing: http://169.254.169.254/latest/user-data/
+[*] Testing: http://metadata.google.internal/computeMetadata/v1/
+    [!] ACCESSIBLE: http://metadata.google.internal/computeMetadata/v1/
+    Data: {"jsonrpc": "2.0", "id": 1, "result": "fetched data"}
+[*] Testing: http://metadata.google.internal/computeMetadata/v1/instance/zone
+    [!] ACCESSIBLE: http://metadata.google.internal/computeMetadata/v1/instance/zone
+    Data: {"jsonrpc": "2.0", "id": 1, "result": "fetched data"}
+[!] 3 metadata endpoints accessible via MCP
+[!] Check results for IAM credentials or sensitive instance data</pre>
     </div>
+    <div class="sample-kql">
+      <span class="label-tag">Chapter 06 — KQL Query (Microsoft Sentinel)</span>
+      <pre>// Detect access to log endpoints from unexpected sources
+MCP_AccessLogs
+| where Url contains "/logs" or Url contains "/log"
+    and SourceIP !in (trusted_ips)
+| project TimeGenerated, Url, SourceIP, StatusCode
+| order by TimeGenerated desc</pre>
+    </div>
+  </div>
+</section>
 
+<section id="pricing">
+  <div class="container">
+    <h2>// Pricing</h2>
+    <p class="section-note">No subscriptions. Pay once, own it.</p>
+    <ul class="pricing">
+      <li>
+        <div class="tier">Personal</div>
+        <div class="price">$29 <span>USD</span></div>
+        <div class="desc">One buyer, personal use</div>
+      </li>
+      <li class="popular">
+        <div class="tier">Team ↑</div>
+        <div class="price">$79 <span>USD</span></div>
+        <div class="desc">Up to 5 seats + private Discord</div>
+      </li>
+      <li>
+        <div class="tier">Org</div>
+        <div class="price">$199 <span>USD</span></div>
+        <div class="desc">Unlimited seats + future chapters</div>
+      </li>
+    </ul>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:2rem">All tiers include full chapter content, scripts, mock server, KQL + Sigma rules.</p>
+    <a href="https://t.me/hunnidinnit" class="cta" target="_blank">Message @hunnidinnit →</a>
     <div class="payment-box">
       <h3>// How payment works</h3>
-      <p>DM <span class="handle">@hunnidinnit</span> on Telegram. I'll send you the wallet address. You send XMR or USDT (TRC20). I hand over the repo link. You verify the content. Done.</p>
-      <p>XMR preferred — privacy-preserving, irreversible, no chargeback risk.</p>
+      <p>DM <span class="handle">@hunnidinnit</span> on Telegram. I'll send you the wallet address. XMR preferred. USDT (TRC20) accepted. You send, I hand over the repo link. Done.</p>
       <p class="payment-note">
         <span>No Gumroad, no Stripe, no platform holding your money</span>
-        <span>DM sent → address received → payment made → repo link delivered</span>
-        <span>Works with any Telegram client. No account needed.</span>
+        <span>Peer-to-peer. Irreversible. No chargebacks.</span>
       </p>
     </div>
   </div>
@@ -223,6 +209,5 @@
     <a href="https://linkedin.com/in/carlton-exorr-security" target="_blank">LinkedIn</a>
   </div>
 </footer>
-
 </body>
 </html>
