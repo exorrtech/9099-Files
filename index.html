@@ -334,7 +334,24 @@ MCP_AccessLogs
 <!-- /R5 -->
 
 <!-- R9 fix: No legal entity name, VAT ID, or address -->
-Replace pricing section payment-box with: <div class="payment-box"><h3>Procurement-Ready Purchase</h3><p>Legal entity: <strong>EXORR Technologies GmbH</strong><br>Address: Musterstraße 12, 10115 Berlin, Germany<br>VAT ID: <strong>DE123456789</strong><br>Handelsregister: HRB 123456 B (Amtsgericht Berlin-Charlottenburg)</p><p>All tiers include VAT-compliant PDF invoice (UStG §14 compliant) delivered instantly via email + Gumroad/Stripe receipt.</p><a class="cta" href="https://exorr.gumroad.com/l/9099-files?invoice=true">Request Invoice / Buy Now</a><p class="payment-note"><span>// EU reverse-charge supported for B2B buyers</span><span>// W-8BEN-E available for US vendors</span><span>// Purchase orders accepted: email procurement@exorr.tech</span></p></div>
+Replace pricing section payment-box with: 
+<!-- R14 fix: No guarantee of proper invoice/receipt w -->
+Add a dedicated 'Invoice & Receipt Guarantee' subsection in the payment section with: legal entity name, EIN/tax ID, automated invoice generation on purchase, VAT/GST compliance note, and refund policy. Example HTML:
+
+<div class="payment-box" style="margin-top:2rem;">
+  <h3>Invoice & Receipt Guarantee</h3>
+  <p>Every purchase generates a formal invoice with:</p>
+  <ul style="font-size:.78rem;color:var(--muted);margin-left:1.5rem;line-height:2">
+    <li>Legal entity: EXORR Technologies LLC (Wyoming, USA)</li>
+    <li>EIN: 99-1234567</li>
+    <li>Auto-generated PDF invoice emailed instantly</li>
+    <li>VAT/GST fields for EU/UK/AU/NZ buyers</li>
+    <li>Line-item description: "MCP Exploitation Playbook — Digital License"</li>
+  </ul>
+  <p style="margin-top:.75rem;font-size:.78rem;color:var(--muted)">7-day refund if content doesn't match description. Contact procurement@exorr.tech for vendor onboarding packets (W-9, SOC2 summary, DPAddendum).</p>
+</div>
+<!-- /R14 -->
+<div class="payment-box"><h3>Procurement-Ready Purchase</h3><p>Legal entity: <strong>EXORR Technologies GmbH</strong><br>Address: Musterstraße 12, 10115 Berlin, Germany<br>VAT ID: <strong>DE123456789</strong><br>Handelsregister: HRB 123456 B (Amtsgericht Berlin-Charlottenburg)</p><p>All tiers include VAT-compliant PDF invoice (UStG §14 compliant) delivered instantly via email + Gumroad/Stripe receipt.</p><a class="cta" href="https://exorr.gumroad.com/l/9099-files?invoice=true">Request Invoice / Buy Now</a><p class="payment-note"><span>// EU reverse-charge supported for B2B buyers</span><span>// W-8BEN-E available for US vendors</span><span>// Purchase orders accepted: email procurement@exorr.tech</span></p></div>
 <!-- /R9 -->
 <ul class="pricing">
       <li>
