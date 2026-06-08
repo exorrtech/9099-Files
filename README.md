@@ -1,6 +1,6 @@
 # 9099 Files — MCP Exploitation Playbook
 
-> *43% of deployed MCP servers have critical vulnerabilities. This is the playbook written from the other side of the keyboard.*
+> *MCP attack surfaces are largely undocumented. This is the playbook written from the other side of the keyboard.*
 
 ---
 
