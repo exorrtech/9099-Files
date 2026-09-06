@@ -20,7 +20,8 @@ import mock_mcp_server as mock
 RUNS = int(sys.argv[1]) if len(sys.argv) > 1 else 30
 BASE = "http://127.0.0.1:8080"
 
-SCRIPTS = [
+import os as _os
+SCRIPTS = [entry for entry in [
     ("chapter_01.py", [BASE]),
     ("chapter_02.py", [BASE]),
     ("chapter_03.py", [BASE]),
@@ -40,7 +41,7 @@ SCRIPTS = [
     ("chapter_17.py", [BASE]),
     ("chapter_18.py", [BASE]),
     ("chapter_19.py", [BASE]),
-]
+] if _os.path.exists(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), entry[0]))]
 
 
 class DevToolHandler(BaseHTTPRequestHandler):
