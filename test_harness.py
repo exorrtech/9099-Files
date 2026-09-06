@@ -41,7 +41,7 @@ SCRIPTS = [entry for entry in [
     ("chapter_17.py", [BASE]),
     ("chapter_18.py", [BASE]),
     ("chapter_19.py", [BASE]),
-] if _os.path.exists(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), entry[0]))]
+] if _os.path.exists(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'scripts/' + entry[0]))]
 
 
 class DevToolHandler(BaseHTTPRequestHandler):
