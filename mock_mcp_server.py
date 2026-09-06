@@ -177,7 +177,7 @@ class MockMCP(BaseHTTPRequestHandler):
             self._send(200, json.dumps({"log": (
                 "2026-09-05 tool=read_file args={\"path\":\"/etc/shadow\"}\n"
                 "2026-09-05 tool=query_db args={\"q\":\"select * from users\"}\n"
-                "2026-09-05 tool=send_mail token=ghp_MOCKTOKEN123\n")}))
+                "2026-09-05 tool=send_mail token=MOCKTOKEN123_exorr_lab\n")}))
 
         elif p == "/mcp/session":
             # ch08 context-bleeding shape: tenant stored per session id
