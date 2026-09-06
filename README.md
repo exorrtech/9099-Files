@@ -18,11 +18,13 @@ test_harness.py starts the lab server and runs every script 30 times. The landin
 
 ## Pricing
 
+Free $0: two full sample chapters, two sample scripts, the lab server, the harness. It is this repository.
+
 Personal $29: all 19 chapters, 19 scripts, lab server, KQL and Sigma rules. One buyer, personal use.
 
-Team $79: everything in Personal, up to 5 seats, detection rule tuning guide.
+Team $79: everything in Personal, up to 5 seats, detection rule tuning guide, priority Telegram support.
 
-Org $199: everything in Team, unlimited seats, future chapter updates, one 30 minute consultation call.
+Org $199: everything in Team, unlimited seats, 12 months of chapter updates, one 30 minute consultation call, audit report template.
 
 Payment is crypto only (XMR preferred, USDT TRC20 accepted). Invoice is a payment receipt with transaction ID. That is what a one-person operation can honestly offer. If your procurement team needs a company invoice with a VAT number, this product is not for you, and pretending otherwise would waste both our time.
 
