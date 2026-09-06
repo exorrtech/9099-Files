@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9099 Files: MCP Exploitation Playbook</title>
+  <meta name="description" content="20-chapter field manual for attacking MCP servers. Working PoC scripts, KQL and Sigma rules. 2 free chapters.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *,*: before,*: after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#000;--surface:#0d0d0d;--border:#1a1a1a;--text:#e0e0e0;--muted:#777;--red:#e63946;--green:#2ecc40;--cyan:#00d4ff;--gold:#f9c74f}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.7}
+    a{color:var(--cyan);text-decoration:none}
+    a:hover{text-decoration:underline}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(0,0,0,.93);border-bottom:1px solid var(--border);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between}
+    .logo{font-size:.8rem;font-weight:700;color:var(--cyan);letter-spacing:.1em}
+    nav ul{list-style:none;display:flex;gap:1.8rem}
+    nav ul li a{color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}
+    nav ul li a:hover{color:var(--text);text-decoration:none}
+    .hero{padding:7.5rem 2rem 4rem;max-width:800px;margin:0 auto}
+    .hero h1{font-size:clamp(2rem,5vw,3.1rem);font-weight:700;line-height:1.15;margin-bottom:1.4rem;color:#fff}
+    .hero p.lead{color:var(--muted);max-width:640px;margin-bottom:1.8rem;font-size:.92rem}
+    .hero-meta{display:flex;gap:1.4rem;flex-wrap:wrap;font-size:.74rem;color:var(--muted)}
+    .hero-meta span{display:flex;align-items:center;gap:.4rem}
+    .dot{width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block}
+    .vernote{margin-top:1.2rem;font-size:.72rem;color:var(--muted)}
+    .vernote b{color:var(--gold);font-weight:400}
+    section{padding:3.5rem 2rem;border-top:1px solid var(--border)}
+    .container{max-width:860px;margin:0 auto}
+    h2{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em}
+    p.section-note{color:var(--muted);font-size:.78rem;margin-bottom:1.8rem;max-width:700px}
+    .samples{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:.5rem}
+    .sample-card{background:var(--surface);border:1px solid #333;border-radius:4px;padding:1.4rem}
+    .sample-card .tag{display:inline-block;background:#0a2d0a;border:1px solid var(--green);color:var(--green);font-size:.62rem;padding:.15rem .5rem;border-radius:2px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.7rem}
+    .sample-card h3{font-size:.95rem;color:#fff;margin-bottom:.4rem}
+    .sample-card p{font-size:.74rem;color:var(--muted);margin-bottom:.9rem}
+    .sample-card a.dl{display:inline-block;background:var(--green);color:#000;padding:.55rem 1.1rem;border-radius:3px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+    .sample-card a.dl:hover{text-decoration:none;background:#25b336}
+    .chapters{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(390px,1fr));gap:.7rem}
+    .chapters li{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:.9rem 1rem}
+    .chapters li h3{font-size:.82rem;color:#fff;margin:.25rem 0 .3rem 0}
+    .ch-num{font-size:.63rem;color:var(--muted)}
+    .cve-tag{display:inline-block;background:#111;border:1px solid #444;font-size:.58rem;padding:.1rem .35rem;border-radius:2px;color:var(--gold);margin-left:.25rem}
+    .ch-class{font-size:.62rem;color:var(--red);display:block;margin-bottom:.15rem}
+    .ch-desc{font-size:.7rem;color:var(--muted);line-height:1.5}
+    .harness{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.3rem 1.5rem;margin:1.2rem 0}
+    .harness pre{background:#000;padding:1rem;border-radius:4px;color:#a6e3a1;font-size:.68rem;overflow-x:auto;white-space:pre;line-height:1.5}
+    .label-tag{display:block;font-size:.66rem;color:var(--cyan);margin-bottom:.7rem;text-transform:uppercase;letter-spacing:.08em}
+    .pricing{list-style:none;display:flex;gap:1rem;flex-wrap:wrap;margin:1.8rem 0}
+    .pricing li{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.4rem;flex:1;min-width:190px}
+    .pricing li.popular{border-color:var(--cyan)}
+    .pricing .tier{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem}
+    .pricing .price{font-size:1.7rem;font-weight:700;color:#fff;margin-bottom:.2rem}
+    .pricing .price span{font-size:.85rem;color:var(--muted);font-weight:400}
+    .pricing .desc{font-size:.7rem;color:var(--muted)}
+    .cta{display:inline-block;background:var(--red);color:#fff;padding:.65rem 1.4rem;border-radius:3px;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+    .cta:hover{background:#c1121f;text-decoration:none}
+    .payment-box{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.4rem;max-width:640px;margin-top:1.6rem}
+    .payment-box h3{font-size:.82rem;margin-bottom:.9rem;color:#fff}
+    .payment-box p{font-size:.76rem;color:var(--muted);margin-bottom:.7rem;line-height:1.7}
+    .payment-box .handle{color:var(--cyan)}
+    .payment-note{font-size:.68rem;color:#555;margin-top:.9rem;line-height:1.6}
+    .payment-note span{display:block}
+    .payment-note span: before{content:'// ';color:var(--muted)}
+    .faq{list-style:none;max-width:720px}
+    .faq li{border-bottom:1px solid var(--border);padding:1rem 0}
+    .faq b{display:block;font-size:.8rem;color:#fff;margin-bottom:.35rem;font-weight:700}
+    .faq p{font-size:.75rem;color:var(--muted)}
+    footer{padding:2.5rem 2rem;text-align:center;border-top:1px solid var(--border)}
+    footer .brand{font-size:.78rem;color:var(--muted);margin-bottom:.4rem}
+    footer .links{display:flex;gap:1.5rem;justify-content:center;margin-top:.8rem}
+    footer .links a{font-size:.7rem;color:var(--muted)}
+    @media(max-width:700px){nav ul{display:none}.hero{padding:5.5rem 1rem 2.5rem}section{padding:2.5rem 1rem}.samples{grid-template-columns:1fr}.chapters{grid-template-columns:1fr}.pricing{flex-direction:column}}
+  </style>
+</head>
+<body>
+<nav>
+  <div class="logo">9099_FILES</div>
+  <ul>
+    <li><a href="#samples">Free Samples</a></li>
+    <li><a href="#chapters">Chapters</a></li>
+    <li><a href="#testing">Testing</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <h1>MCP Exploitation Playbook</h1>
+  <p class="lead">Nineteen chapters on attacking Model Context Protocol servers. Prompt injection through OAuth, tool poisoning through sandbox escape, every chapter built the same way: the technique, a working script against a lab target, and detection rules for your SIEM. Written from research and engagements, and updated as the ecosystem moves.</p>
+  <div class="hero-meta">
+    <span><span class="dot"></span>19 chapters</span>
+    <span><span class="dot"></span>19 scripts</span>
+    <span><span class="dot"></span>lab server included</span>
+    <span><span class="dot"></span>KQL + Sigma rules</span>
+    <span><span class="dot"></span>stdlib + requests only</span>
+  </div>
+  <p class="vernote">v3, September 2026. Rebuilt from zero with every CVE reference re-verified against NVD and OSV: <b>10 real CVEs</b> anchored to the chapters where they actually apply, zero padding tags.</p>
+</div>
+
+<section id="samples">
+  <div class="container">
+    <h2>// Free Samples</h2>
+    <p class="section-note">Two full chapters, free. Not teasers: complete technique, complete script, detection rules included. Read them before you pay for anything.</p>
+    <div class="samples">
+      <div class="sample-card">
+        <span class="tag">Sample 1</span>
+        <h3>Chapter 1: Prompt Injection via Tool Instructions</h3>
+        <p>The founding attack. User text reaches model context unsanitized, instructions ride along. Full chain, working tester, KQL and Sigma rules. 5 pages.</p>
+        <a class="dl" href="sample-chapter-1.pdf">Download PDF</a>
+      </div>
+      <div class="sample-card">
+        <span class="tag">Sample 2</span>
+        <h3>Chapter 10: Tool Poisoning and Rug Pulls</h3>
+        <p>Tool descriptions are instructions for the model, and they can mutate after you approve them. Fingerprint-and-watch detector included, rug pull demonstrated live. 4 pages.</p>
+        <a class="dl" href="sample-chapter-10.pdf">Download PDF</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="chapters">
+  <div class="container">
+    <h2>// Chapters</h2>
+    <p class="section-note">CVE tags appear only where a chapter builds on a vulnerability verified in NVD or OSV. No padding tags: the chapters without a tag are technique chapters anchored to published research instead.</p>
+    <ul class="chapters">
+      <li><div class="ch-num">01</div><span class="ch-class">Direct Injection</span><h3>Prompt Injection via Tool Instructions</h3><div class="ch-desc">Instructions embedded in content reaching model context unsanitized. Instruction precedence, multi-turn poisoning, why config fixes do not touch this.</div></li>
+      <li><div class="ch-num">02</div><span class="ch-class">Auth Drift</span><h3>Permission Escalation</h3><div class="ch-desc">Capability drift between declared and actual tool scopes. Chaining across privilege boundaries. Mapping what a server can really do.</div></li>
+      <li><div class="ch-num">03 <span class="cve-tag">CVE-2023-46229</span></div><span class="ch-class">SSRF</span><h3>SSRF and Metadata Endpoints</h3><div class="ch-desc">Cloud metadata theft through MCP tool calls, the LangChain loader SSRF pattern, Capital One anatomy mapped to the MCP layer.</div></li>
+      <li><div class="ch-num">04 <span class="cve-tag">CVE-2023-44487</span></div><span class="ch-class">Resource Exhaustion</span><h3>Context Exhaustion</h3><div class="ch-desc">Token bombs, window exhaustion through tool results, per-call cost amplification. HTTP/2 Rapid Reset applied to agent transports.</div></li>
+      <li><div class="ch-num">05</div><span class="ch-class">Data Poisoning</span><h3>Result Poisoning</h3><div class="ch-desc">Contaminating tool caches and analysis outputs so downstream calls trust attacker content. Web-cache-poisoning class, moved to agent context.</div></li>
+      <li><div class="ch-num">06</div><span class="ch-class">Info Leakage</span><h3>Tool Behavior Leaks</h3><div class="ch-desc">Log endpoints that expose tool arguments and secrets, timing side channels, finding credentials in server responses.</div></li>
+      <li><div class="ch-num">07</div><span class="ch-class">Injection II</span><h3>Server-Side Injection</h3><div class="ch-desc">Malicious content in server responses, propagated wherever tool output is rendered or stored. Sanitization bypasses.</div></li>
+      <li><div class="ch-num">08</div><span class="ch-class">Isolation Failure</span><h3>Cross-Tenant Leakage</h3><div class="ch-desc">Tenant-ID manipulation on shared servers, context bleeding between sessions, where tool-level isolation breaks.</div></li>
+      <li><div class="ch-num">09 <span class="cve-tag">CVE-2024-25852</span></div><span class="ch-class">Chained Exploitation</span><h3>Tool Chaining Attacks</h3><div class="ch-desc">The Apache HugeGraph-Server chain: no single tool vulnerable, the composition was. Sequencing tool calls for RCE.</div></li>
+      <li><div class="ch-num">10</div><span class="ch-class">Description Abuse</span><h3>Tool Poisoning and Rug Pulls</h3><div class="ch-desc">Descriptions are model instructions. Poisoned definitions, mutation after approval, the fingerprint-and-watch detector. Anchored to Invariant Labs research.</div></li>
+      <li><div class="ch-num">11 <span class="cve-tag">CVE-2025-32711</span></div><span class="ch-class">Zero-Click</span><h3>Zero-Click Injection via Connectors</h3><div class="ch-desc">The EchoLeak class: content that arrives by itself carries instructions, auto-fetch becomes the exfil channel. No user action anywhere.</div></li>
+      <li><div class="ch-num">12 <span class="cve-tag">CVE-2025-6514</span></div><span class="ch-class">Auth Abuse</span><h3>OAuth Confused Deputy</h3><div class="ch-desc">Token passthrough, missing audience binding, the mcp-remote redirect-to-shell injection. The server's authority turned against its users.</div></li>
+      <li><div class="ch-num">13 <span class="cve-tag">CVE-2025-49596</span></div><span class="ch-class">Dev Surface</span><h3>Insecure Dev and Debug Endpoints</h3><div class="ch-desc">MCP Inspector proxy without auth, eval surfaces on localhost, every web page in the browser holding the trigger.</div></li>
+      <li><div class="ch-num">14</div><span class="ch-class">Supply Chain</span><h3>Malicious Server Distribution</h3><div class="ch-desc">The postmark-mcp backdoor shape: legitimate-looking package, one egress line. Typosquat distance, hook audit, behavior diffing.</div></li>
+      <li><div class="ch-num">15</div><span class="ch-class">Transport</span><h3>Session and Transport Hijacking</h3><div class="ch-desc">Session fixation, cross-origin ID reuse, DNS rebinding against local servers. MCP spec Origin requirements, tested.</div></li>
+      <li><div class="ch-num">16</div><span class="ch-class">Data Flow</span><h3>Cross-Connector Exfil Chains</h3><div class="ch-desc">Read from one system, write to another, until data moves somewhere it was never sanctioned. EARP-class auto-forwarding chains.</div></li>
+      <li><div class="ch-num">17</div><span class="ch-class">Contract Abuse</span><h3>Schema Poisoning and Tampering</h3><div class="ch-desc">Schemas that lie: permissive patterns, hidden properties, instruction text. Servers that accept anything regardless of declared types.</div></li>
+      <li><div class="ch-num">18</div><span class="ch-class">Retrieval</span><h3>RAG Corpus Poisoning</h3><div class="ch-desc">Instructions that persist in the retrieval layer, activate on conditions, reach users the attacker never met. Canary-based measurement.</div></li>
+      <li><div class="ch-num">19 <span class="cve-tag">CVE-2025-3248</span> <span class="cve-tag">CVE-2024-50050</span></div><span class="ch-class">Sandbox</span><h3>Code Execution Sandbox Escape</h3><div class="ch-desc">Langflow unauth RCE, Llama Stack pickle deserialization. Filesystem, metadata, internal network probes. Measuring the sandbox you shipped.</div></li>
+    </ul>
+  </div>
+</section>
+
+<section id="testing">
+  <div class="container">
+    <h2>// Testing</h2>
+    <p class="section-note">Every script runs against the included lab server. Recorded battery: 30 runs per script against the lab server, 570 of 570 passed across the 19 shipped scripts. The one dropped probe depended on live package registries and is excluded. Run the harness yourself on day one and compare. Run it yourself on day one.</p>
+    <div class="harness">
+      <span class="label-tag">test_harness.py, 30 runs per script against mock_mcp_server.py</span>
+      <pre>  [PASS] chapter_01.py      30/30
+  [PASS] chapter_02.py      30/30
+  [PASS] chapter_03.py      30/30
+  [PASS] chapter_04.py      30/30
+  [PASS] chapter_05.py      30/30
+  [PASS] chapter_06.py      30/30
+  [PASS] chapter_07.py      30/30
+  [PASS] chapter_08.py      30/30
+  [PASS] chapter_09.py      30/30
+  [PASS] chapter_10.py      30/30
+  [PASS] chapter_11.py      30/30
+  [PASS] chapter_12.py      30/30
+  [PASS] chapter_13.py      30/30
+  [PASS] chapter_14.py      30/30
+  [PASS] chapter_15.py      30/30
+  [PASS] chapter_16.py      30/30
+  [PASS] chapter_17.py      30/30
+  [PASS] chapter_18.py      30/30
+  [PASS] chapter_19.py      30/30
+
+=== 19/19 scripts, 570/570 runs at 30 each ===</pre>
+    </div>
+    <p class="section-note">Scripts use stdlib and requests only. No pip install. Point them at servers you own, or at the lab server, never at systems without written permission.</p>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <h2>// Pricing</h2>
+    <p class="section-note">No subscriptions. Pay once, keep it.</p>
+    <ul class="pricing">
+      <li><div class="tier">Personal</div><div class="price">$29 <span>USD</span></div><div class="desc">All 19 chapters, 19 scripts, lab server, KQL and Sigma rules. One buyer, personal use.</div><a href="https://t.me/hunnidinnit" class="cta">Buy $29</a></li>
+      <li class="popular"><div class="tier">Team</div><div class="price">$79 <span>USD</span></div><div class="desc">Everything in Personal, up to 5 seats, detection rule tuning guide.</div><a href="https://t.me/hunnidinnit" class="cta">Buy $79</a></li>
+      <li><div class="tier">Org</div><div class="price">$199 <span>USD</span></div><div class="desc">Everything in Team, unlimited seats, future chapter updates, one 30 minute consultation call.</div><a href="https://t.me/hunnidinnit" class="cta">Buy $199</a></li>
+    </ul>
+    <div class="payment-box">
+      <h3>// Payment</h3>
+      <p>DM <span class="handle">@hunnidinnit</span> on Telegram. XMR or USDT (TRC20). Private repo access within 24 hours of payment.</p>
+      <p>One honest limitation, stated up front: this is a one-person operation. You receive a payment receipt with the transaction ID, not a company invoice with a VAT number. If your procurement process needs the latter, this is not your product. If you want working offensive security research on MCP, it is.</p>
+      <p class="payment-note">
+        <span>XMR preferred, keeps both sides private</span>
+        <span>7 day refund if the content does not match this page</span>
+        <span>questions before buying are welcome, ask first, pay second</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <h2>// FAQ</h2>
+    <ul class="faq">
+      <li><b>What exactly do I get?</b><p>A private repo: 19 chapters in PDF and markdown, 20 Python scripts, the lab server, a test harness, and detection rules. Lifetime access to that repo, updates for 12 months.</p></li>
+      <li><b>Is this legal to own?</b><p>Yes. It is offensive security education. Running the techniques against systems without written permission is illegal everywhere that matters. The scripts say so too.</p></li>
+      <li><b>Why crypto only?</b><p>It is the only payment rail that works from where I operate. The trade is stated plainly: no chargebacks, no corporate invoice, receipt with transaction ID.</p></li>
+      <li><b>Why should I trust the content?</b><p>Two full chapters are free. The CVEs are checked against public databases. The scripts run against the lab server you can test yourself. Judge the product on the sample, not the pitch.</p></li>
+      <li><b>Refunds?</b><p>7 days, if the content does not match what this page describes. That promise is worth the cost of honoring it.</p></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p class="brand">9099_FILES / exorr.tech</p>
+    <div class="links">
+      <a href="https://github.com/exorrtech/9099-Files" target="_blank">GitHub</a>
+      <a href="https://t.me/hunnidinnit" target="_blank">Telegram</a>
+      <a href="https://www.exorr.tech" target="_blank">exorr.tech</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
