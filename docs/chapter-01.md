@@ -1,4 +1,4 @@
-# Chapter 1: Prompt Injection via Tool Instructions
+# Chapter 01: Prompt Injection via Tool Instructions
 ## The 9099 Files: MCP Exploitation Playbook
 
 ---
@@ -222,3 +222,5 @@ The remaining 9 chapters contain the same depth for:
 Permission Escalation · SSRF · Context Exhaustion · Result Poisoning · Log Leaks · Server Injection · Cross-Tenant Leakage · Tool Manipulation · Dependency Attacks
 
 TX hash to `@hunnidinnit` on Telegram.
+
+**Chapter 01 of 19.**

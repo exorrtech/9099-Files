@@ -134,4 +134,5 @@ level: high
 
 ---
 
-**Chapter 10 of 19. The full playbook ships every chapter with a working script against the included mock server.**
+
+**Chapter 10 of 19.**
